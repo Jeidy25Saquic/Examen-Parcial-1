@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Examen_Parcial_1
 {
@@ -23,31 +24,55 @@ namespace Examen_Parcial_1
         {
         }
 
-        public void registrarPedido( List<Cliente> clientes)
+        public bool registrarPedido( List<Cliente> clientes, List<Pedido> pedidos)
         {
-            bool existe=false;
+            bool existe = false, duplicado = false; ;
             Console.WriteLine("Ingrese el numero de pedido");
             int numero= int.Parse(Console.ReadLine());
-            Console.WriteLine("Ingrese la fecha del pedido");
-            string fecha = Console.ReadLine();
-            Console.WriteLine("Ingrese el nombre  del Cliente");
-            string nombre= Console.ReadLine().ToUpper();
-            foreach(Cliente cliente in clientes)
+            foreach (Pedido pedido in pedidos)
             {
-                if (cliente.ExisteCliente(nombre) == true)
+                if (pedido.NumeroPedido==numero)
                 {
-                    NumeroPedido = numero;
-                    Fecha = fecha;
-                    ClientePedido = cliente;
-                    existe=true;
+                    Console.WriteLine(" Error: Ya existe un pedido con ese numero");
+                    duplicado=true;
                     break;
                 }
             }
-
-            if (existe == false)
+            if (duplicado == false)
             {
-                Console.WriteLine("No existe ese cliente para registrar el pedido");
+                Console.WriteLine("Ingrese la fecha del pedido");
+                string fecha = Console.ReadLine();
+                Console.WriteLine("Ingrese el nombre  del Cliente");
+                string nombre = Console.ReadLine().ToUpper();
+                foreach (Cliente cliente in clientes)
+                {
+                    if (cliente.ExisteCliente(nombre) == true)
+                    {
+                        NumeroPedido = numero;
+                        Fecha = fecha;
+                        ClientePedido = cliente;
+                        existe = true;
+                        Console.WriteLine("Se agrego correctamente");
+                        break;
+                    }
+                }
+
+                if (existe == false)
+                {
+                    Console.WriteLine("No existe ese cliente para registrar el pedido");
+                }
             }
+            return existe;
+        }
+        public bool ExistePedido(int numeroPedido)
+        {
+            bool existe = true;
+
+            if (NumeroPedido != numeroPedido)
+            {
+                existe = false;
+            }
+            return existe;
 
         }
         public void MostrarDetallesPedido()

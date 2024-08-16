@@ -21,6 +21,7 @@ class Program
                 Console.WriteLine("3. Detalles de  Cliente");
                 Console.WriteLine("4. Detalles de  Pedido");
                 Console.WriteLine("5. Buscar Cliente");
+                Console.WriteLine("6. Buscar Pedido");
                 Console.WriteLine("7. salir");
 
 
@@ -42,11 +43,13 @@ class Program
                                 ClienteEstandar clienteEstandar = new ClienteEstandar();
                                 clienteEstandar.SolicitarDatos();
                                 clientes.Add(clienteEstandar);
+                                Console.WriteLine("Se agrego correctamente");
                                 break;
                             case 2:
                                 ClientePremium clientePremium = new ClientePremium();
                                 clientePremium.SolicitarDatos();
                                 clientes.Add(clientePremium);
+                                Console.WriteLine("Se agrego correctamente");
                                 break;
                         }
 
@@ -57,8 +60,10 @@ class Program
                         Console.Clear();
                         Console.WriteLine("2. Registrar Pedidos");
                         Pedido pedido = new Pedido();
-                        pedido.registrarPedido(clientes);
-                        pedidos.Add(pedido);
+                        if (pedido.registrarPedido(clientes, pedidos) == true)
+                        {
+                            pedidos.Add(pedido);
+                        }
                         Console.WriteLine();
 
                         break;
@@ -79,8 +84,14 @@ class Program
                         break;
                     case 5:
                         Console.Clear();
-                        Console.WriteLine("Detalles de Pedido");
+                        Console.WriteLine("Buscar Clientes");
                         BuscarClientes(clientes);
+                        Console.WriteLine();
+                        break;
+                    case 6:
+                        Console.Clear();
+                        Console.WriteLine("Buscar  Pedido");
+                        BuscarPedido(pedidos);
                         Console.WriteLine();
                         break;
 
@@ -124,7 +135,7 @@ class Program
         }
     }
     static void BuscarClientes(List<Cliente> clientes)
-    {
+    { bool existe=false;
         Console.WriteLine("Ingrese el nombre del cliente");
 
         string nombre=Console.ReadLine().ToUpper();
@@ -134,11 +145,15 @@ class Program
             if (cliente.ExisteCliente(nombre) == true)
             {
                 cliente.MostrarDetalles();
+               existe= true;
                 break;
             }
         }
 
-       
+       if (existe== false)
+        {
+            Console.WriteLine("No existe el cliente");
+        }
 
     }
 
@@ -151,6 +166,30 @@ class Program
             pedido.MostrarDetallesPedido();
             Console.WriteLine();
         }
+    }
+
+    static void BuscarPedido(List<Pedido> pedidos)
+    {
+        bool existe = false;
+        Console.WriteLine("Ingrese el numero del pedido");
+
+       int numeroPedido= int.Parse(Console.ReadLine());
+
+        foreach (Pedido pedido in pedidos)
+        {
+            if (pedido.ExistePedido(numeroPedido) == true)
+            {
+                pedido.MostrarDetallesPedido();
+                existe= true;
+                break;
+            }
+        }
+
+        if (existe == false)
+        {
+            Console.WriteLine("No existe el cliente");
+        }
+
     }
 
 
